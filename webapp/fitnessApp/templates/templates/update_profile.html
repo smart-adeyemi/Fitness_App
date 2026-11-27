@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+{% if update_error %}
+
+    <div class="error-box">
+        <h3 class='error-title'> Error! </h3>
+        <p class="error"> {{update_error}} </p>
+    </div>
+
+{% endif %}
+
+{% if password_error %}
+
+    <div class="error-box">
+        <h3 class='error-title'> Error! </h3>
+        <p class="error"> {{password_error}} </p>
+    </div>
+
+{% endif %}
+
+<div class='form-container'>
+    <div class="form-wrapper left-align-form">
+    <h2> Update profile </h2>
+        <div class="log-form">
+            <form method="post" action="{% url 'update_profile' %}" id="Update_Form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class='left-label' for="username">New username: </label>
+                    <input class='left-input' type="text" name="username" placeholder="{{ user.username }}"/>
+                </div>
+
+                <div class="form-group">
+                    <label class='left-label' for="email">New email: </label>
+                    <input class='left-input' type="text" name="email" placeholder="{{ user.email }}" />
+                </div>
+
+                <div class="form-group">
+                    <label class='left-label' for="age">New age: </label>
+                    <input class='left-input' type="text" name="age" placeholder="{{ user.age }}" min="0" step="1" />
+                </div>
+
+                <div class="form-group">
+                    <label class='left-label' for="weight">New weight (in kg): </label>
+                    <input class='left-input' type="text" name="weight" placeholder="{{ user.weight }}" min="0" step="0.01" />
+                </div>
+
+                <div class="form-group">
+                    <label class='left-label' for="height">New height (in cm): </label>
+                    <input class='left-input' type="text" name="height" placeholder="{{ user.height }}" min="0" step="0.01" />
+                </div>
+
+                <h2>Gender</h2>
+
+                <!-- <div class="fornm-options">
+                    <button type="button" class="form-option" data-value="male">
+                        Male
+                    </button>
+
+                    <button type="button" class="form-option" data-value="female">
+                        Female
+                    </button>
+
+                    <button type="button" class="form-option" data-value="other">
+                        Other
+                    </button>
+                </div> -->
+
+                <div class="radio_group">
+                    <div class="radio_option">
+                        <input type="radio" id="male" name="gender" value="male">
+                        <label class="radio_label" for="male">Male</label>
+                    </div>
+                    
+                    <div class="radio_option">
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label class="radio_label" for="female">Female</label>
+                    </div>
+                    
+                    <div class="radio_option">
+                        <input type="radio" id="other" name="gender" value="other">
+                        <label class="radio_label" for="other">Other</label>
+                    </div>
+                </div>
+
+                <h2>How active are you?</h2>
+
+                <div class="radio_option">
+                    <input type="radio" id="sedentary" name="pal" value="sedentary" required>
+                    <label for="sedentary">Sedentary: Little to no exercise</label>
+                </div>
+                
+                <div class="radio_option">
+                    <input type="radio" id="slightly_active" name="pal" value="slightly_active" required>
+                    <label for="slightly_active">Slightly Active: A bit of exercise 1-3 days a week</label>
+                </div>
+
+                <div class="radio_option">
+                    <input type="radio" id="moderately_active" name="pal" value="moderately_active" required>
+                    <label for="moderately_active">Moderately active: Moderate exercise 3-5 days a week</label>
+                </div>
+
+                <div class="radio_option">
+                    <input type="radio" id="very_active" name="pal" value="very_active" required>
+                    <label for="very_active">Very Active: Hard exercise 6-7 days a week</label>
+                </div>
+
+                <div class="radio_option">
+                    <input type="radio" id="super_active" name="pal" value="super_active" required>
+                    <label for="super_active">Super active: Hard exercise 6-7 days a week and a physically demanding job</label>
+                </div>
+
+                <button class='submit-button' type="submit">Enter</button>
+            </form> 
+        </div>
+    </div>
+
+    <div class='form-wrapper'>
+        <div class="log-form">
+            <h2> Change Password </h2>
+            <form id="password" method="post" action="{% url 'change_password' %}">
+                {% csrf_token %}
+
+                <label class='left-label' for="old">Old Password: </label>
+                <input class='left-input' type="text" name="old"/>
+
+                <label class='left-label' for="new">New Password: </label>
+                <input class='left-input' type="text" name="password"/>
+
+                <button class='submit-button' type="submit">Enter</button>
+            </form> 
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('Update_Form').addEventListener('submit', function(e) {
+        const fields = [
+            { name: 'username',  fallback: '{{ user.username }}' },
+            { name: 'email',     fallback: '{{ user.email }}' },
+            { name: 'age',       fallback: '{{ user.age }}' },
+            { name: 'height',    fallback: '{{ user.height }}' },
+            { name: 'weight',    fallback: '{{ user.weight }}' }
+        ];
+
+        const radioFields = [
+            { name: 'gender', fallback: '{{ user.gender }}' } 
+        ];
+
+        fields.forEach(field => {
+            const input = this.querySelector(`input[name="${field.name}"]`);
+            if (input && input.value === '') {
+                input.value = field.fallback;
+                }
+            });
+
+        radioFields.forEach(field => {
+        const selectedRadio = this.querySelector(`input[name="${field.name}"]:checked`);
+        const fallbackValue = field.fallback;
+        
+        if (!selectedRadio && fallbackValue) {
+            const fallbackRadio = this.querySelector(`input[name="${field.name}"][value="${fallbackValue}"]`);
+            if (fallbackRadio) {
+                fallbackRadio.checked = true; 
+                }
+            }
+        });
+    });
+
+</script>
+
+
+{% endblock %}

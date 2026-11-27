@@ -1,0 +1,22 @@
+Email
+pulsefitintra@gmail.com
+
+Password:
+pjB26Fp3HkQGsm
+
+
+Download libraries from requirements.txt
+Download Redis from a bash terminal or elsewhere. https://redis.io/docs/latest/operate/oss_and_stack/install/archive/install-redis/
+
+celery worker
+celery -A fitnessApp worker -l debug --pool=solo
+
+celery scheduler
+celery -A fitnessApp beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+redis server
+bash - sudo service redis-server start
+pwsh - wsl sudo service redis-server start
+
+sudo service redis-server status: check if redis server is running
+sudo service redis-server stop

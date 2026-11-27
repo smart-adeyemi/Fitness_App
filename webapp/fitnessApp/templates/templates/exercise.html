@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<img class="icon" src="{% static 'templates/images/food_logo.png' %}">
+
+<!--
+<h1> Exercises Done today </h1>
+<ul>
+{% for name, duration in exercises_today.items %}
+    {% if name != 'total' %}
+        <li><h4>{{name}} -- {{duration}} minutes</h4></li>
+    {% endif %}
+{% endfor %}
+</ul>
+
+
+
+<h4>Target calories: {{user.target_calories}}</h4>
+<h4> Total Calories Burned Today: {{total_calories_burned}} <h4>
+<h4>Todays calories: {{todays_calories}} </h4>
+
+{% if todays_calories > target_calories %}
+    <p>Try doing some exercise to reach your target calories</p>
+
+{% endif %}
+-->
+
+
+<div class='form-container'>
+    <div class="form-wrapper">
+        <h1> Add New Exercise </h1>
+            <div class='log-form left-align-form'>
+
+            <form method="post" action="{% url 'add_exercise' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label class='left-label' for="name">Name of Exercise: </label>
+                    <input class='left-input' type="text" name="name"/>
+                </div>
+
+                <div class="form-group">
+                    <label class='left-label' for="met">Metabolic EquivalenT: </label>
+                    <input class='left-input' type="number" name="met" min="0" step="0.5"/>
+                </div>
+
+                <div class="form-group">
+                    <label class='left-label' for="duration">Average minutes spent on exercise: </label>
+                    <input class='left-input' type="number" name="duration" min="0" step="1"/>
+                </div>
+
+                <button class='submit-button' type="submit">Add Workout</button>
+            </form> 
+        </div>
+    </div>
+
+    <div class="form-wrapper">
+        <h1> Log Exercises </h1>
+
+        <div class="log-form">
+
+            <form method="post" action="{% url 'log_exercise' %}" id="Log_Exercise">
+                {% csrf_token %}
+
+                <!--<h4>Name of Exercise</h4>
+
+                <select name="name">
+
+                {% for name, cal in exercise_dict.items %}
+                    <option value="{{name}}">{{name}}</option>
+                {% endfor %}
+
+                </select> -->
+                <div class="form-options">
+                    {% for name, cal in exercise_dict.items %}
+                        <button type="button" class="form-option" data-value="{{ name }}">
+                            {{ name }}
+                        </button>
+                    {% endfor %}
+                </div>
+
+                <input type="hidden" name="name" id="selected-exercise">
+
+                <label class="log-label" for="duration">Minutes spent exercising (optional): </label>
+                <input type="number" name="duration" min="0" step="1" placeholder="blank for default duration"/>
+
+
+                <button class="submit-button" type="submit">Log Exercise</button>
+            </form> 
+        </div>
+    </div>
+</div>
+
+<a class="link_rectangle" href="https://media.hypersites.com/clients/1235/filemanager/MHC/METs.pdf"> Click Here for Metabolic EquivalenT info </a>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const exerciseOptions = document.querySelectorAll('.form-option');
+    const selectedExerciseInput = document.getElementById('selected-exercise');
+    
+    exerciseOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            exerciseOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            this.classList.add('selected');
+            
+            selectedExerciseInput.value = this.getAttribute('data-value');
+        });
+    });
+
+    document.getElementById('Log_Exercise').addEventListener('submit', function(e) {
+        const servingsInput = this.querySelector('input[name="duration"]');
+        if (servingsInput.value === '') {
+            servingsInput.value = '0';
+        }
+    });
+});
+</script>
+
+{% endblock %}

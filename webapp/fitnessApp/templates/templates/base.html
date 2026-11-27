@@ -1,0 +1,474 @@
+{% load static %}
+
+<html>
+	<head>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@800&family=Varela+Round&display=swap" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+		<style>
+			body {
+				background: linear-gradient(to top, #4d2831, #783f4d, #a5566a);
+				min-height: 100vh;
+				margin: 0;
+				background-attachment: fixed; /* Ensures it covers entire page */
+			}
+
+
+			div.top {
+				display: flex;
+				/*justify-content: space-between; */
+				/* align-items: right;  Vertically center the items */
+				justify-content: flex-end; 
+				background-color: rgb(0, 0, 0);
+				padding: 2px;
+				width: 100vw; /* Full width */
+				z-index: 1000; /* Ensure it stays on top of other content */
+				margin-bottom: 100px;
+				margin-right: 0px;
+				position: fixed; /* Fix the top bar at the top of the screen */
+				right: 0;
+				left: 50%; /* Center the .top div itself */
+  				transform: translateX(-50%); /* Adjust for true center */
+			}
+
+			.top-image {
+				height: 60px;  /* Adjust size as needed */
+				width: auto;
+				transition: transform 0.2s;
+			}
+
+			.profile_icon {
+				margin-left: auto;
+			}
+			
+			* {
+				font-family: 'Varela Round', 'Arial Rounded MT Bold', sans-serif;
+				box-sizing: border-box;
+				max-width: 100%; /* Ensures elements don't expand beyond the viewport */
+			}
+
+			/*h1.top {
+				margin: 0; 
+				color: #4db4d9; 
+				position: absolute; 
+				left: 50%; 
+				transform: translateX(-50%); 
+			} */
+
+			.top_title {
+				margin-top: 10px;
+				position: absolute; 
+				left: 55%; 
+				transform: translateX(-50%); 
+				color: #4db4d9; 
+				white-space: nowrap; /* Prevent text wrapping */
+			}
+
+			h1.acc {
+				margin: 0; 
+				color: #4db4d9;
+			}
+
+			.acc a,
+			.home a, 
+			.home a:link, 
+			.home a:visited, 
+			.home a:hover, 
+			.home a:active, 
+			.home a:focus {
+				color: #4db4d9 !important;
+				text-decoration: none; 
+			}
+
+			.dumbell {
+				position: fixed; /* Fix position relative to the viewport */
+				top: 50px;      /* Adjust distance from top */
+				left: 20px;     /* Adjust distance from left */
+				z-index: 1001;
+			}
+
+			.sidenav {
+				padding-top: 80px;
+				height: 100%;
+				width: 200px;
+				position: fixed;
+				z-index: 1;
+				top: 0;
+				left: 0;
+				background-color: black;
+				overflow-x: hidden;
+				padding-top: 20px;
+				display: flex;   
+				flex-direction: column;     /* Stack items vertically */
+				justify-content: center;    /* Center vertically */
+				align-items: flex-start; /* Align items to the left */
+    			padding-left: 20px;
+			}
+
+			.sidenav a {
+				display: flex; /* Use flexbox for link items */
+				align-items: center; /* Vertically align icon and text */
+				gap: 10px; /* Space between icon and text */
+				padding: 6px 0; /* Vertical padding only */
+				text-decoration: none;
+				font-size: 25px;
+				color: #ffffff;
+				width: 100%; /* Take full width of sidenav */
+				margin: 10px 0 10px 0;
+			}
+
+			.sidenav a:hover {
+				color: #b05d71;
+			}
+
+			.sidenav img{
+				height: 40px; /* Adjust icon size */
+				width: 40px; /* Fixed width for alignment */
+				margin: 0; 
+			}
+
+			.logos {
+				display: flex;
+				justify-content: center; 
+				align-items: center; 
+				gap: 100px; 
+				margin-bottom: 40px; 
+			}
+
+			.logos img{
+				height: 200px;
+			}
+
+			.icon {
+				height: 100px;
+				weight: 100px;
+				margin-bottom: 20px;
+			}
+
+			.alert-box{
+				background-color: rgb(0, 0, 0);
+				padding-left: 10px;
+				padding-right: 10px;
+				border-radius: 20px;
+				margin: 10px;
+			}
+
+			.alert-success{
+				font-size: 30px;
+				color:rgb(25, 209, 34);
+			}
+
+			.home_box{
+				display: flex; 
+				justify-content: space-between; 
+				background-color: rgb(0, 0, 0);
+				padding: 20px;
+				align-items: center;
+				width: 50%;
+				margin: auto;
+				margin-top: 70;
+				margin-bottom: 70px;
+				align: center;
+			}
+
+			.home_box h1,
+			.home_box h2,
+			.home_box h3{
+				font-size: 30;
+				color: #4db4d9 !important;
+			}
+
+			h1,
+			h2,
+			h3 {
+				color: #4db4d9;
+			}
+
+			.heading {
+				background: black;
+				color: #4db4d9;
+				padding: 6px 6px 6px 6px;
+			}
+
+			.link_rectangle{
+				width: 100%;
+				max-width: 400px;
+				padding: 8px;
+				border-radius: 20px;
+				font-weight: bold;
+				background-color: #4db4d9;
+				color: black;
+				text-decoration: none;
+			}
+
+			.profile_details{
+				text-align: start;
+				margin-bottom: 20px;
+			}
+
+			.profile_details h1,
+			.profile_details h2{
+				width: 100%;
+				max-width: 400px;
+				padding: 8px;
+				border-radius: 10px;
+				font-weight: bold;
+				background-color: black;
+				color: white;
+				text-decoration: none;
+				border: 1px, solid, white;
+				margin: 2px 0px 2px 0px;
+			}
+
+			.profile_details h3 {
+				color: #4db4d9;
+				margin: 15px 0px 2px 0px;
+			}
+
+			.content {
+				position: relative;
+				margin-left: 200px; /* Same width as sidenav */
+				padding-top: 80px; /* Height of top bar */
+				min-height: calc(100vh - 80px); /* Full viewport minus top bar */
+				display: flex;
+				flex-direction: column;
+				align-items: center; /* Center horizontally */
+				justify-content: center; /* Center vertically */
+				text-align: center; /* Center text content */
+				padding: 20px;
+				box-sizing: border-box;
+			}
+
+			.form-container {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 30px;
+				width: 100%;
+				max-width: 1000px;
+				margin: 0 auto;
+			}
+
+			.left-align-form .form-group {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				width: 100%;
+				margin-bottom: 15px;
+			}
+
+			.left-label {
+				display: block;
+				text-align: left;
+				width: 100%;
+			}
+
+			.left-input {
+				width: 100%;
+				max-width: 400px;
+				text-align: left;
+				padding: 8px;
+				border-radius: 4px;
+				margin-bottom: 5px;
+			}
+
+			.form-wrapper {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+				max-width: 450px;
+				margin-bottom: 20px;
+				background-color: black;
+				padding: 20px;
+				border-radius: 8px;
+			}
+
+			.form-wrapper h1,
+			.form-wrapper h2,
+			.form-wrapper h3 {
+				color: #4db4d9;
+				text-align: center;
+				margin-bottom: 15px;
+			}
+
+			.log-form {
+				color: black;
+				border-radius: 8px;
+				padding: 20px;
+				width: 100%;
+			}
+
+			.log-form label,
+			.form-wrapper label{
+				color: #4db4d9;
+			}
+
+			.log-label {
+				font-size: 20px;
+				color: #4db4d9;
+				margin-bottom: 5px;
+			}
+
+			.log-form input {
+				width: 100%;
+				max-width: 400px;
+				padding: 8px;
+				border-radius: 4px;
+			}
+
+			.form input {
+				border: 1px solid white;
+				color: black;
+				border-radius: 4px;
+			}
+
+			.form label {
+				color: #4db4d9;
+			}
+
+			.submit-button {
+				color: black;
+				background-color: #4db4d9;
+				border-radius: 12px;
+				min-height: 30px;
+				font-size: 20px;
+				padding: 6 6 6 6;
+				margin-top: 10;
+			}
+
+			.form h1,
+			.form h2,
+			.form h3 {
+				color: #4db4d9;
+			}
+
+			.form-options {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center; 
+				margin-bottom: 20px;
+				gap: 15px;
+			}
+			
+			.form-option {
+				padding: 5px 5px;
+				background-color: black;
+				border: 1px solid white;
+				border-radius: 12px;
+				cursor: pointer;
+				transition: all 0.1s;
+				color: white;
+				min-width: 150px;
+				height: 40px;
+				margin: 0;
+			}
+			
+			.form-option.selected {
+				color: rgb(11, 121, 15);
+				border-color: rgb(11, 121, 15);
+				font-weight: bold;
+			}
+
+			.radio_group {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 15px;
+				margin-bottom: 15px;
+			}
+
+			.radio_label{
+				color: #4db4d9;
+    			margin: 0;
+			}
+
+			.radio_option {
+				border: 1px, solid, white;
+				padding: 6px 6px 6px 6px;
+				margin-bottom: 10px;
+				border-radius: 10px;
+			}
+
+			.error-box{
+				background-color: rgb(0, 0, 0);
+				padding: 10px;
+				border-radius: 20px;
+				margin: 10px;
+			}
+
+			.error-title{
+				font-size: 30px;
+				color:rgb(255, 0, 0);
+			}
+
+			.error{
+				font-size: 20px;
+				color:rgb(255, 0, 0);
+			}
+
+			/* Remove the old <center> tags since we're handling centering in CSS */
+
+		</style>
+		<h1>
+	    </h1>
+	</head>
+	<body>
+		<div class='top'><!--
+			<a href="{% url 'homepage' %}">
+        		<img src="{% static 'templates/images/home_icon.png' %}" alt="Home" class="top-image">
+    		</a> -->
+
+			<a href="{% url 'view_profile' %}" class="profile_icon">
+            	<img src="{% static 'templates/images/profile_icon.png' %}" alt="Your Profile" class="top-image">
+        	</a>
+
+			<h1 class="top_title">PulseFit</h1>
+
+		</div>
+
+		<div class="dumbell">
+			<a href="{% url 'homepage' %}">
+        		<img src="{% static 'templates/images/home_icon.png' %}" alt="Home" class="top-image">
+    		</a>
+		</div>
+
+		<div class="sidenav">
+			<a href="{% url 'homepage' %}">
+				<img src="{% static 'templates/images/nav_home.png' %}">
+				Home</a>
+			<a href="{% url 'stats' %}">
+				<img src="{% static 'templates/images/nav_stats.png' %}">
+				Stats</a>
+			<a href="{% url 'settings' %}">
+				<img src="{% static 'templates/images/nav_settings.png' %}">
+				Settings</a>
+		</div>
+		<br><br><br>
+
+		<div class="content">
+			{% if form.non_field_errors %}
+				<div class="error-box">
+				<h3 class='error-title'> Error! </h3>
+
+					{% for field in form.non_field_errors %}
+						{% for error in form.non_field_errors %}
+							<h4 class="error">{{ error }} </h4>
+						{% endfor %}
+					{% endfor %}
+
+				</div><br>
+			{% endif %}
+
+			{% if messages %}
+			<div class="alert-box">
+				{% for message in messages %}
+					<h4 class="alert-success">{{ message }}</h4>
+				{% endfor %}
+			</div>
+			{% endif %}
+
+			{% block content %}
+			{% endblock %}
+		</div>
+	</body>
+</html> 

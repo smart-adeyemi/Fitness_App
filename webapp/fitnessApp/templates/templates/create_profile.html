@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<center>
+<div class='form-container'>
+    <div class="form-wrapper left-align-form">
+		<h2 class='form'> Enter your account details </h2>
+		<form action="{% url 'create_profile' %}", method="POST" >
+		
+			{% csrf_token %}
+			<div class="form-group">
+				<label class='left-label' for="email">Email: </label>
+				<input class='left-input' type="text" name="email" required/>
+			</div>
+
+			<div class="form-group">
+				<label class='left-label' for="username">Username: </label>
+				<input class='left-input' type="text" name="username" required/>
+			</div>
+
+			<div class="form-group">
+				<label class='left-label' for="password">Password: </label>
+				<input class='left-input' type="text" name="password" required/>
+			</div>
+
+			<div class="form-group">
+				<label class='left-label' for="age">Age: </label>
+				<input class='left-input' type="number" name="age" required/>
+			</div>
+
+			<div class="form-group">
+				<label class='left-label' for="weight">Weight (in kg): </label>
+				<input class='left-input' type="number" name="weight" required/>
+			</div>
+
+			<div class="form-group">
+				<label class='left-label' for="height">Height (in cm): </label>
+				<input class='left-input' type="number" name="height" required/>
+			</div>
+
+            <!--<label class='left-label' for="birth_date">Date of Birth: </label>
+			<input class='left-input' type="date" name="birth_date" required/> -->
+
+			<h2>Gender</h2>
+
+			<div class="radio_group">
+				<div class="radio_option">
+					<input type="radio" id="male" name="gender" value="male">
+					<label class="radio_label" for="male">Male</label>
+				</div>
+				
+				<div class="radio_option">
+					<input type="radio" id="female" name="gender" value="female">
+					<label class="radio_label" for="female">Female</label>
+				</div>
+				
+				<div class="radio_option">
+					<input type="radio" id="other" name="gender" value="other">
+					<label class="radio_label" for="other">Other</label>
+				</div>
+			</div>
+
+			<h2>How active are you?</h2>
+
+			<div class="radio_option">
+				<input type="radio" id="sedentary" name="pal" value="sedentary" required>
+				<label for="sedentary">Sedentary: Little to no exercise</label>
+			</div>
+			
+			<div class="radio_option">
+				<input type="radio" id="slightly_active" name="pal" value="slightly_active" required>
+				<label for="slightly_active">Slightly Active: A bit of exercise 1-3 days a week</label>
+			</div>
+
+			<div class="radio_option">
+				<input type="radio" id="moderately_active" name="pal" value="moderately_active" required>
+				<label for="moderately_active">Moderately active: Moderate exercise 3-5 days a week</label>
+			</div>
+
+			<div class="radio_option">
+				<input type="radio" id="very_active" name="pal" value="very_active" required>
+				<label for="very_active">Very Active: Hard exercise 6-7 days a week</label>
+			</div>
+
+			<div class="radio_option">
+				<input type="radio" id="super_active" name="pal" value="super_active" required>
+				<label for="super_active">Super active: Hard exercise 6-7 days a week and a physically demanding job</label>
+			</div>
+
+			<button class='submit-button' type="submit">Create Account</button>
+		</form>
+	</div>
+</div>
+</center>
+
+{% endblock %}

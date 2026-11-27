@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="profile_details">
+    <!-- <a class="link_button" href="{% url 'logout' %}"> Click to Logout </a> -->
+    <h3> Username: </h3>
+    <h2> {{user.username}} </h2>
+
+    <h3> Email: </h3>
+    <h2> {{user.email}} </h2>
+
+    <h3> Age: </h3>
+    <h2> {{user.age}} </h2>
+
+    <h3> Height: </h3>
+    <h2> {{user.height}} cm </h2>
+
+    <h3> Weight: </h3>
+    <h2> {{user.weight}} kg</h2>
+
+    <h3> Gender: </h3>
+    <h2>{{user.gender}} </h2>
+
+    <!--<h3> Average calorie intake: </h3>
+    <h2>{{user.average_calorie_intake}} </h2> -->
+
+    <h3> Target Calories: </h3>
+    <h2>{{user.target_calories}} </h2>
+
+    <h3> Minimum Calories: </h3>
+    <h2> {{user.min_calories}} </h2>
+    
+</div>
+<!--
+    {% if password_form %}
+
+        <div class="error-box">
+            <h3 class='error-title'> Error! </h3>
+            <p class="error"> {{password_form}} </p>
+        </div><br>
+
+    {% endif %}
+
+    <h2><b> Change Password</h2>
+    
+    <div class='form'>
+        <form id="password" method="post" action="{% url 'change_password' %}">
+            {% csrf_token %}
+
+            <label class='form' for="old">Old Password: </label>
+            <input class='form' type="text" name="old"/><br><br>
+
+            <label class='form' for="new">New Password: </label>
+            <input class='form' type="text" name="password"/><br><br>
+
+            <button class='form' type="submit">Enter</button>
+        </form> 
+    </div> 
+
+<br><br> -->
+
+
+<a class="link_rectangle" href="{% url 'update_profile' %}">Update Profile</a>
+
+
+
+{% endblock %}

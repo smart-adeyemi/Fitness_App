@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+    <div class="home_box">
+        <h3>Todays calories: {{todays_calories}} </h3>
+        <h3>Target calories: {{user.target_calories}}</h3>
+    </div>
+
+	<div class="logos">
+
+        <a href="{% url 'journal' %}">
+        <img class="home_logo" src="{% static journal_img %}">
+
+        </a>
+	</div>
+
+    <div class="logos">
+
+        <a href="{% url 'exercise' %}">
+        <img class="home_logo" src="{% static exercise_img %}">
+
+        </a>
+
+    </div>
+
+<script> console.log("Hi"); </script>
+
+{% endblock %}

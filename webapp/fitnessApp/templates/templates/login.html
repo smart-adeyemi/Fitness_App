@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<center>
+<div class="form-wrapper">
+	<h2 class='form'> Enter your account details </h2>
+	<div class='log-form left-align-form'>
+		<form action="{% url 'login' %}", method="POST" >
+			{% csrf_token %}
+			<label class='left-label' for="email">Email: </label>
+			<input class='left-input' type="text" name="email"/>
+
+			<label class='left-label' for="password">Password: </label>
+			<input class='left-input' type="text" name="password"/>
+
+			<button class='submit-button' type="submit">Log in</button>
+		</form>
+	</div>
+</div>
+
+	<a href="{% url 'create_profile' %}"> <button class="submit-button">Create a new account</button> </a>
+
+</center>
+
+{% endblock %}

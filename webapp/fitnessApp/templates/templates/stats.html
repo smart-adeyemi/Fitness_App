@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Stats</h2>
+
+<canvas id="chart" width="400" height="100"></canvas> 
+
+<h2>{{message.subject}}</h2>
+<p>{{message.message}}</p>
+
+<script>
+console.log("Hi");
+//console.log("Dates:", {{ dates|safe }});
+console.log("Eaten:", {{ calories_eaten|safe }});
+console.log("Lost:",{{ calories_lost|safe }}); 
+
+let ctx = document.getElementById("chart").getContext("2d");
+
+const horizontalLinePlugin = {
+    id: 'calorie_lines',
+    afterDraw: (chart) => {
+        const ctx = chart.ctx;
+        const chartArea = chart.chartArea;
+        
+        // Define your reference lines with names
+        const referenceLines = [
+            {
+                name: "Average Calorie Intake",
+                value: 3000,
+                color: 'red',
+                width: 2,
+                dash: []
+            },
+            {
+                name: "Target Calories",
+                value: 2500,
+                color: 'green',
+                width: 2,
+                dash: []
+            },
+            {
+                name: "Minimum Calories",
+                value: 1800,
+                color: 'blue',
+                width: 2,
+                dash: []
+            }
+        ];
+
+        referenceLines.forEach(line => {
+            drawHorizontalLine(
+                chart,
+                line.value,
+                line.color,
+                line.width,
+                line.dash,
+                line.name
+            );
+        });
+    }
+};
+
+function drawHorizontalLine(chart, value, color, width, dashPattern, label = '') {
+    const yPos = chart.scales.y.getPixelForValue(value);
+    const ctx = chart.ctx;
+    const chartArea = chart.chartArea;
+    
+    ctx.save();
+    
+    ctx.beginPath();
+    ctx.moveTo(chartArea.left, yPos);
+    ctx.lineTo(chartArea.right, yPos);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    
+    if (dashPattern.length) {
+        ctx.setLineDash(dashPattern);
+    }
+    
+    ctx.stroke();
+    
+    if (label) {
+        const textPadding = 4;
+        const textX = chartArea.left + 10;
+        const textY = yPos - 5;
+        
+        ctx.font = '12px Arial';
+        const textWidth = ctx.measureText(label).width;
+        
+        //Draw background rectangle
+        ctx.fillStyle = `${color}20`;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(
+            textX - textPadding, 
+            textY - 10, //Adjust for font height
+            textWidth + textPadding * 2,
+            16, //Background height
+            4   //Border radius
+        );
+        ctx.fill();
+        ctx.stroke();
+        
+        //Draw text
+        ctx.fillStyle = 'white'; //Text color
+        //ctx.textBaseline = 'middle';
+        ctx.fillText(label, textX, textY);
+    }
+    
+    ctx.restore();
+}
+
+let chart = new Chart(ctx, {
+  type: "bar",
+  data: {
+    labels: {{ dates|safe }}, //['09/06/25', '10/06/25', '11/06/25', '12/06/25', '13/06/25', '14/06/25', '15/06/25'],
+    datasets: [
+      {
+        label: "Calories Eaten",  
+        backgroundColor: "#79AEC8",
+        borderColor: "#417690",
+        data: {{ calories_eaten|safe }},  //[2222, 1222, 4453, 1334, 1885, 2000, 1675] 
+        barThickness: 40
+      },
+      {
+        label: "Calories Lost (Through Exercise)", 
+        backgroundColor: "#FFA07A",  
+        borderColor: "#CD5C5C",
+        data: {{ calories_lost|safe }}, //[1222, 222, 3453, 334, 885, 1000, 675]
+        barThickness: 40
+      }
+    ]
+  },
+  options: {
+    title: {
+      text: "Weekly Progress",
+      display: true
+    },
+    scales: {
+      xAxes: [{
+        barPercentage: 0.4,
+        categoryPercentage: 0.8  
+      }],
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  },
+  plugins: [horizontalLinePlugin],
+});
+
+</script>
+{% endblock %}

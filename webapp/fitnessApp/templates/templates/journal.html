@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% load static %}
+
+<img class="icon" src="{% static 'templates/images/food_logo.png' %}">
+
+<!--
+<h1> Food Eaten Today </h1>
+<ul>
+{% for name, servings in food_today.items %}
+    {% if name != 'total' %}
+        <li><h4>{{name}} -- {{servings}}g</h4></li>
+    {% endif%}
+{% endfor %}
+</ul>
+
+
+
+<h4>Target calories: {{user.target_calories}}</h4>
+<h4> Total Calories Eaten Today: {{calories_eaten}} <h4>
+<h4>Todays calories: {{todays_calories}} </h4>
+
+{% if todays_calories > target_calories %}
+    <p>Try doing some exercise to reach your target calories instead of eating</p>
+
+{% endif %}
+-->
+
+
+<div class='form-container'>
+    <div class="form-wrapper">
+        <h1> Add New Food </h1>
+        <div class='log-form left-align-form'>
+
+            <form method="post" action="{% url 'add_food' %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label class="left-label" for="name">Name of Food: </label>
+                    <input class="left-input" type="text" name="name" required/>
+                </div>
+
+                <div class="form-group">
+                    <label class="left-label" for="calories">Number of Calories (kcal per 100g): </label>
+                    <input class="left-input" type="number" name="calories" min="0" step="0.01" required/>
+                </div>
+
+                <div class="form-group">
+                    <label class="left-label" for="fats">Fats (per 100g): </label>
+                    <input class="left-input" type="number" name="fats" min="0" step="0.01" required/>
+                </div>
+
+                <div class="form-group">
+                    <label class="left-label" for="carbs">Carbs (per 100g): </label>
+                    <input class="left-input" type="number" name="carbs" min="0" step="0.01" required/>
+                </div>
+
+                <div class="form-group">
+                    <label class="left-label" for="protein">Protein (per 100g): </label>
+                    <input class="left-input" type="number" name="protein" min="0" step="0.01" required/>
+                </div>
+
+                <div class="form-group">
+                    <label class="left-label" for="servings">Default Servings in grams: </label>
+                    <input class="left-input" type="number" name="servings" min="0" step="0.01" required/>
+                </div>
+
+                <button class="submit-button" type="submit">Add Meal</button>
+            </form> 
+        </div>
+    </div>
+
+    <div class="form-wrapper">
+        <h1> Log Food </h1>
+        
+        <div class="log-form">
+
+            <form method="post" action="{% url 'log_food' %}" id="Log_Food">
+                {% csrf_token %}
+
+                <!-- <select name="name">
+
+                {% for name, cal in food_dict.items %}
+                    <option value="{{name}}">{{name}}</option>
+                {% endfor %}
+
+                </select> -->
+                <div class="form-options">
+                    {% for name, cal in food_dict.items %}
+                        <button type="button" class="form-option" data-value="{{ name }}">
+                            {{ name }}
+                        </button>
+                    {% endfor %}
+                </div>
+
+                <input type="hidden" name="name" id="selected-food">
+
+                <label class="log-label" for="servings">Servings in grams (optional): </label>
+                <input type="number" name="servings" min="0" step="1" placeholder="blank for default servings"/>
+
+                <button class="submit-button" type="submit">Add Meal</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const foodOptions = document.querySelectorAll('.form-option');
+    const selectedFoodInput = document.getElementById('selected-food');
+    
+    foodOptions.forEach(option => {
+        option.addEventListener('click', function() {
+            //Remove selected class from all options
+            foodOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            //Add selected class to clicked option
+            this.classList.add('selected');
+            
+            //Update hidden input value with selected food
+            selectedFoodInput.value = this.getAttribute('data-value');
+        });
+    });
+    
+    document.getElementById('Log_Food').addEventListener('submit', function(e) {
+        const servingsInput = this.querySelector('input[name="servings"]');
+        if (servingsInput.value === '') {
+            servingsInput.value = '0';
+        }
+    });
+});
+</script>
+
+
+{% endblock %}
